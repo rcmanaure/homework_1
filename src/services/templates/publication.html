@@ -8,9 +8,14 @@
 <article class="media content-section">
     <div class="media-body">
         <div class="article-metadata">
-            <a class="mr-2" href="/profile">Author: {{ publication.author }}</a>
+            <mark>
+                <a class="article-title" href="/post/{{publication.id}}">Name: {{ publication.name }}</a>
+            </mark>
+
+
 
         </div>
+        <a class="article-title" href="/post/{{publication.id}}">Item: {{ publication.title }}</a>
         <h2><small class="article-title" href="#">Capacity: {{ publication.capacity }}.</small></h2>
         <h2><small class="article-title" href="#">Package: {{ publication.package }}.</small></h2>
         <h2><small class="article-title" href="#">Fridge: {{ publication.fridge }}.</small></h2>
@@ -18,7 +23,7 @@
         <h2><small class="article-title" href="#">Date: {{ publication.create_at.strftime('%Y-%m-%d %H:%M:%S')
                 }}</small></h2>
         <h2>
-            <a class="article-title" href="/post/{{publication.id}}">Title: {{ publication.title }}</a>
+            <a class="mr-2" href="/profile">Author: {{ publication.author }}</a>
         </h2>
         <p class="article-content">Description: {{ publication.content }}</p><br>
 

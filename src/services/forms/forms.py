@@ -1,7 +1,14 @@
 from flask_wtf import FlaskForm
 from flask_login import current_user
 from flask_wtf.file import FileField, FileAllowed
-from wtforms import StringField, PasswordField, SubmitField, BooleanField, TextAreaField
+from wtforms import (
+    StringField,
+    PasswordField,
+    SubmitField,
+    BooleanField,
+    TextAreaField,
+    SelectField,
+)
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
 from services.app import User
 
@@ -66,9 +73,22 @@ class UpdateAccountForm(FlaskForm):
 
 
 class ItemForm(FlaskForm):
-    title = StringField("Title", validators=[DataRequired()])
+    name = TextAreaField("Name", validators=[DataRequired()])
+    title = SelectField(
+        "Item",
+        validators=[DataRequired()],
+        choices=["Food", "Spice", "Drink", "Sauce"],
+    )
     content = TextAreaField("Description", validators=[DataRequired()])
-    capacity = TextAreaField("Capacity", validators=[DataRequired()])
-    package = TextAreaField("Package", validators=[DataRequired()])
+    capacity = SelectField(
+        "Capacity",
+        validators=[DataRequired()],
+        choices=[100, 1000],
+    )
+    package = SelectField(
+        "Package",
+        validators=[DataRequired()],
+        choices=["box", "bottle"],
+    )
     fridge = BooleanField("Fridge")
     submit = SubmitField("Post")

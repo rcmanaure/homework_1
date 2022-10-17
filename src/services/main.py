@@ -40,7 +40,7 @@ def delete_profile():
 
 
 @main.route("/profile", methods=["GET"])
-# Show the publications in the home page.
+# Show the items in the home page.
 @swag_from("./docs/profile/profile_user.yaml")
 def profile_user():
     form = UpdateAccountForm()
@@ -72,7 +72,7 @@ def profile():
 
 
 @main.route("/", methods=["GET"])
-# Show the publications in the home page.
+# Show the Items in the home page.
 @swag_from("./docs/publications/posts.yaml")
 def publication():
     publications = Item.query.all()
@@ -80,13 +80,14 @@ def publication():
 
 
 @main.route("/post/new", methods=["POST", "GET"])
-# To add a new Publication.
+# To add a new Item.
 @login_required
 @swag_from("./docs/publications/post.yaml")
 def new_post():
     form = ItemForm()
     if form.validate_on_submit():
         post = Item(
+            name=form.name.data,
             title=form.title.data,
             content=form.content.data,
             user_id=current_user.id,
@@ -94,6 +95,7 @@ def new_post():
             capacity=form.capacity.data,
             package=form.package.data,
             fridge=form.fridge.data,
+            status="CREATED",
         )
         db.session.add(post)
         db.session.commit()
@@ -103,14 +105,14 @@ def new_post():
 
 
 @main.route("/post/<uuid:id>")
-# To get a specific Publication.
+# To get a specific Item.
 def post(id):
     publication = Item.query.get_or_404(id)
     return render_template("post.html", publication=publication)
 
 
 @main.route("/post/<uuid:id>/update", methods=["GET", "POST"])
-# To update a specific Publication.
+# To update a specific Item.
 @login_required
 @swag_from("./docs/publications/update_post.yaml")
 def update_post(id):
@@ -124,6 +126,8 @@ def update_post(id):
         post.capacity = form.capacity.data
         post.package = form.package.data
         post.fridge = form.fridge.data
+        post.name = form.name.data
+        post.status = "UPDATED"
         db.session.commit()
         flash("Your item has been updated!", "success")
         return redirect(url_for("main.post", id=post.id))
@@ -133,14 +137,15 @@ def update_post(id):
         form.capacity.data = post.capacity
         form.package.data = post.package
         form.fridge.data = post.fridge
-    return render_template("create_post.html", form=form, legend="Update Post")
+        form.name.data = post.name
+    return render_template("create_post.html", form=form, legend="Update Item")
 
 
 @main.route(
     "/post/<uuid:post_id>/delete",
     methods=["POST", "GET"],
 )
-# To delete a specific Publication.
+# To delete a specific Item.
 @login_required
 @swag_from("./docs/publications/delete_post.yaml")
 def delete_post(post_id):

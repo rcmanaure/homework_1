@@ -64,6 +64,7 @@ class Item(db.Model):
     # Model Post to be created in Postgresql.(Publicacion)
 
     id = db.Column(UUID(as_uuid=True), default=uuid.uuid4, primary_key=True)
+    name = db.Column(db.String(50), nullable=False)
     title = db.Column(db.String(50), nullable=False)
     content = db.Column(db.Text, nullable=False)
     status = db.Column(db.String(30), default="WAITING", nullable=True)

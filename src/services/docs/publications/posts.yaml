@@ -1,10 +1,10 @@
-Show all the publications.
+Show all the Items.
 ---
 tags:
-  - Publications
+  - Items
 parameters:
   # - name: body
-  - description: Show all the publications.
+  - description: Show all the items.
 # in: body
 # required: true
 # schema:
@@ -21,7 +21,7 @@ parameters:
 #       example: "Content 1"
 responses:
   200:
-    description: When a user successfully add a publication
+    description: Items
 
   400:
     description: Fails to add due to bad request data

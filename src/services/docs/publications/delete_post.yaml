@@ -1,11 +1,11 @@
-Delete a Publication
+Delete Item
 ---
 tags:
-  - Publications
+  - Items
 parameters:
   - name: body
     description: The URL must contain an id.
-      example= /post/<int:post_id>/delete
+      example= /post/<uuid:post_id>/delete
     in: body
     required: true
     schema:
@@ -18,7 +18,7 @@ parameters:
           example: "1"
 responses:
   200:
-    description: When a user successfully delete a publication
+    description: When a user successfully delete an item
 
   400:
     description: Fails to add due to bad request data

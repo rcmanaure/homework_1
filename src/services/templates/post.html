@@ -2,14 +2,17 @@
 
 {% block content %}
 <h2 class="subtitle">
-    Publication Detail
+    Item Detail
 </h2>
 <article class="media content-section">
     <div class="media-body">
         <div class="article-metadata">
-            <a class="mr-2" href="/profile">Author: {{ publication.author }}</a>
+            <mark>
+                <p class="article-title" href="#">Name: {{ publication.name }}</p>
+            </mark>
 
         </div>
+        <p class="article-title" href="#">Item: {{ publication.title }}</p>
         <h2><small class="article-title" href="#">Capacity: {{ publication.capacity }}.</small></h2>
         <h2><small class="article-title" href="#">Package: {{ publication.package }}.</small></h2>
         <h2><small class="article-title" href="#">Fridge: {{ publication.fridge }}.</small></h2>
@@ -17,7 +20,7 @@
         <h2><small class="article-title" href="#">Date: {{ publication.create_at.strftime('%Y-%m-%d %H:%M:%S')
                 }}</small></h2>
         <h2>
-            <p class="article-title" href="#">Title: {{ publication.title }}</p>
+            <a class="mr-2" href="/profile">Author: {{ publication.author }}</a>
         </h2>
         <p class="article-content">Description: {{ publication.content }}</p><br>
         <h2><a class="button  is-danger" href="/post/{{publication.id}}/update">Update Publication</a></h2>

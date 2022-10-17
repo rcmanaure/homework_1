@@ -1,12 +1,12 @@
-Update a Publication
+Update Item
 ---
 tags:
-  - Publications
+  - Items
 parameters:
   - name: body
     description: The body should contain title or description.
       The URL must contain an id.
-      example= /post/<int:id>/update
+      example= /post/<uuid:id>/update
     in: body
     required: true
     schema:
@@ -17,13 +17,13 @@ parameters:
       properties:
         title:
           type: "string"
-          example: "Publication 1"
+          example: "Item 1"
         description:
           type: "string"
           example: "Content 1"
 responses:
   200:
-    description: When a user successfully update a publication
+    description: When a user successfully update an item
 
   400:
     description: Fails to add due to bad request data
