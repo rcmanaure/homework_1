@@ -1,5 +1,6 @@
 # FlasK Project by Ruben Castillo
 
+
 ## DOCKER COMMANDS TO USE:
 
 ## To build image:
@@ -48,8 +49,11 @@ Escribe en el lenguaje de programación que desees, un programa que muestre en
 pantalla los números del 1 al 100, sustituyendo los múltiplos de 3 por la palabra “VIN” y,
 a su vez, los múltiplos de 5 por “CLE”. Para los casos que, al tiempo, son múltiplos de 3
 y 5, utiliza el combinado “VINCLE”.
+#### Script python
+Run the file home_work.py
 
 ## Numero 02
+Follow the dockers commands.
 Diseña, documenta e implementa una PC (entregable y ejecutable en Docker) de un
 sistema para poder visualizar en tiempo real la evolución de creación, modificación,
 parada y destrucción de Ítems.
