@@ -1,0 +1,30 @@
+Add Item
+---
+tags:
+  - Items
+parameters:
+  - name: body
+    description: The body should contain title and description.
+    in: body
+    required: true
+    schema:
+      type: object
+      required:
+        - "item"
+        - "description"
+      properties:
+        title:
+          type: "string"
+          example: "Item 1"
+        description:
+          type: "string"
+          example: "Content 1"
+responses:
+  200:
+    description: When a user successfully add an item
+
+  400:
+    description: Fails to add due to bad request data
+
+  401:
+    description: A user supplies incorrect data

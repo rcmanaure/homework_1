@@ -1,0 +1,27 @@
+Delete Item
+---
+tags:
+  - Items
+parameters:
+  - name: body
+    description: The URL must contain an id.
+      example= /item/<int:item_id>/delete
+    in: body
+    required: true
+    schema:
+      type: object
+      required:
+        - "id"
+      properties:
+        id:
+          type: "integer"
+          example: "1"
+responses:
+  200:
+    description: When a user successfully delete an item
+
+  400:
+    description: Fails to add due to bad request data
+
+  401:
+    description: A user supplies incorrect data

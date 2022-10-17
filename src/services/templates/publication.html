@@ -1,29 +1,31 @@
 {% extends "base.html" %}
 
-{% block content %}    
-    <h2 class="subtitle">
-        Publications
-    </h2>    
-    {% for publication in publications %}
-        <article class="media content-section">
-            <div class="media-body">
-                <div class="article-metadata">
-                    <a class="mr-2" href="/profile">Author: {{ publication.author }}</a>
+{% block content %}
+<h2 class="subtitle">
+    Items
+</h2>
+{% for publication in publications %}
+<article class="media content-section">
+    <div class="media-body">
+        <div class="article-metadata">
+            <a class="mr-2" href="/profile">Author: {{ publication.author }}</a>
 
-                </div>
-                <h2><small class="article-title" href="#">Priority: {{ publication.priority }}.</small></h2>
-                <h2><small class="article-title" href="#">Status: {{ publication.status }}.</small></h2>
-                <h2><small class="article-title" href="#">Date: {{ publication.create_at.strftime('%Y-%m-%d %H:%M:%S')
-                        }}</small></h2>
-                <h2>
-                    <a class="article-title" href="/post/{{publication.id}}">Title: {{ publication.title }}</a>
-                </h2>
-                <p class="article-content">Description: {{ publication.content }}</p><br>
-                
-            </div>
-        </article>
+        </div>
+        <h2><small class="article-title" href="#">Capacity: {{ publication.capacity }}.</small></h2>
+        <h2><small class="article-title" href="#">Package: {{ publication.package }}.</small></h2>
+        <h2><small class="article-title" href="#">Fridge: {{ publication.fridge }}.</small></h2>
+        <h2><small class="article-title" href="#">Status: {{ publication.status }}.</small></h2>
+        <h2><small class="article-title" href="#">Date: {{ publication.create_at.strftime('%Y-%m-%d %H:%M:%S')
+                }}</small></h2>
+        <h2>
+            <a class="article-title" href="/post/{{publication.id}}">Title: {{ publication.title }}</a>
+        </h2>
+        <p class="article-content">Description: {{ publication.content }}</p><br>
 
-    
-    {% endfor %}
-    
+    </div>
+</article>
+
+
+{% endfor %}
+
 {% endblock %}

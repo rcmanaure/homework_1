@@ -1,15 +1,14 @@
-from flask import (Blueprint, render_template, url_for,
-                   flash, redirect, request, abort)
+from flask import Blueprint, render_template, url_for, flash, redirect, request, abort
 from flask_login import login_required, current_user
-from services.forms.forms import UpdateAccountForm, PostForm
-from .app import User, db, app, Post
+from services.forms.forms import UpdateAccountForm, ItemForm
+from .app import User, db, app, Item
 import os
 import secrets
 from PIL import Image
 from flasgger import swag_from
 
 # Init the Blueprints of be used in the mains routes.
-main = Blueprint('main', __name__)
+main = Blueprint("main", __name__)
 
 
 def save_picture(form_picture):
@@ -17,8 +16,7 @@ def save_picture(form_picture):
     random_hex = secrets.token_hex(8)
     _, f_ext = os.path.splitext(form_picture.filename)
     picture_fn = random_hex + f_ext
-    picture_path = os.path.join(
-        app.root_path, 'static/profile_pics', picture_fn)
+    picture_path = os.path.join(app.root_path, "static/profile_pics", picture_fn)
 
     output_size = (125, 125)
     i = Image.open(form_picture)
@@ -28,7 +26,7 @@ def save_picture(form_picture):
     return picture_fn
 
 
-@main.route("/profile/delete", methods=['POST', 'GET'])
+@main.route("/profile/delete", methods=["POST", "GET"])
 # To delete current logged User.
 @login_required  # Must be log in.
 def delete_profile():
@@ -37,22 +35,22 @@ def delete_profile():
         abort(403)
     db.session.delete(user)
     db.session.commit()
-    flash('Your account has been deleted!', 'success')
-    return redirect(url_for('main.publication'))
+    flash("Your account has been deleted!", "success")
+    return redirect(url_for("main.publication"))
 
 
-@main.route('/profile', methods=['GET'])
+@main.route("/profile", methods=["GET"])
 # Show the publications in the home page.
-@swag_from('./docs/profile/profile_user.yaml')
+@swag_from("./docs/profile/profile_user.yaml")
 def profile_user():
     form = UpdateAccountForm()
-    return render_template('profile.html', form=form)
+    return render_template("profile.html", form=form)
 
 
-@main.route('/profile', methods=['POST'])
+@main.route("/profile", methods=["POST"])
 # To update the user account.
 @login_required  # Must be log in.
-@swag_from('./docs/profile/profile.yaml')
+@swag_from("./docs/profile/profile.yaml")
 def profile():
     form = UpdateAccountForm()
     if form.validate_on_submit():
@@ -62,87 +60,94 @@ def profile():
         current_user.username = form.username.data
         current_user.email = form.email.data
         db.session.commit()
-        flash('Your account has been updated.')
-        return redirect(url_for('main.profile'))
-    elif request.method == 'GET':
+        flash("Your account has been updated.")
+        return redirect(url_for("main.profile"))
+    elif request.method == "GET":
         form.username.data = current_user.username
         form.email.data = current_user.email
-    photo = url_for(
-        'static', filename='profile_pics/' + current_user.image_file)
-    return render_template('profile.html',
-                           name=current_user.email,
-                           photo=photo, form=form
-                           )
+    photo = url_for("static", filename="profile_pics/" + current_user.image_file)
+    return render_template(
+        "profile.html", name=current_user.email, photo=photo, form=form
+    )
 
 
-@main.route('/', methods=['GET'])
+@main.route("/", methods=["GET"])
 # Show the publications in the home page.
-@swag_from('./docs/publications/posts.yaml')
+@swag_from("./docs/publications/posts.yaml")
 def publication():
-    publications = Post.query.all()
-    return render_template('publication.html', publications=publications)
+    publications = Item.query.all()
+    return render_template("publication.html", publications=publications)
 
 
-@main.route("/post/new", methods=['POST'])
+@main.route("/post/new", methods=["POST", "GET"])
 # To add a new Publication.
 @login_required
-@swag_from('./docs/publications/post.yaml')
+@swag_from("./docs/publications/post.yaml")
 def new_post():
-    form = PostForm()
+    form = ItemForm()
     if form.validate_on_submit():
-        post = Post(title=form.title.data,
-                    content=form.content.data,
-                    user_id=current_user.id,
-                    author=current_user.username
-                    )
+        post = Item(
+            title=form.title.data,
+            content=form.content.data,
+            user_id=current_user.id,
+            author=current_user.username,
+            capacity=form.capacity.data,
+            package=form.package.data,
+            fridge=form.fridge.data,
+        )
         db.session.add(post)
         db.session.commit()
-        flash('Your post has been created!', 'success')
-        return redirect(url_for('main.publication'))
-    return render_template('create_post.html',
-                           form=form,
-                           legend='New Publication'
-                           )
+        flash("Your item has been created!", "success")
+        return redirect(url_for("main.publication"))
+    return render_template("create_post.html", form=form, legend="New Item")
 
 
-@main.route("/post/<int:id>")
+@main.route("/post/<uuid:id>")
 # To get a specific Publication.
 def post(id):
-    publication = Post.query.get_or_404(id)
-    return render_template('post.html',  publication=publication)
+    publication = Item.query.get_or_404(id)
+    return render_template("post.html", publication=publication)
 
 
-@main.route("/post/<int:id>/update", methods=['GET', 'POST'])
+@main.route("/post/<uuid:id>/update", methods=["GET", "POST"])
 # To update a specific Publication.
 @login_required
-@swag_from('./docs/publications/update_post.yaml')
+@swag_from("./docs/publications/update_post.yaml")
 def update_post(id):
-    post = Post.query.get_or_404(id)
+    post = Item.query.get_or_404(id)
     if post.user_id != current_user.id:
         abort(403)
-    form = PostForm()
+    form = ItemForm()
     if form.validate_on_submit():
         post.title = form.title.data
         post.content = form.content.data
+        post.capacity = form.capacity.data
+        post.package = form.package.data
+        post.fridge = form.fridge.data
         db.session.commit()
-        flash('Your post has been updated!', 'success')
-        return redirect(url_for('main.post', id=post.id))
-    elif request.method == 'GET':
+        flash("Your item has been updated!", "success")
+        return redirect(url_for("main.post", id=post.id))
+    elif request.method == "GET":
         form.title.data = post.title
         form.content.data = post.content
-    return render_template('create_post.html',
-                           form=form, legend='Update Post')
+        form.capacity.data = post.capacity
+        form.package.data = post.package
+        form.fridge.data = post.fridge
+    return render_template("create_post.html", form=form, legend="Update Post")
 
 
-@main.route("/post/<int:post_id>/delete", methods=['POST'])
+@main.route(
+    "/post/<uuid:post_id>/delete",
+    methods=["POST", "GET"],
+)
 # To delete a specific Publication.
 @login_required
-@swag_from('./docs/publications/delete_post.yaml')
+@swag_from("./docs/publications/delete_post.yaml")
 def delete_post(post_id):
-    post = Post.query.get_or_404(post_id)
+    post = Item.query.get_or_404(post_id)
     if post.user_id != current_user.id:
         abort(403)
     db.session.delete(post)
     db.session.commit()
-    flash('Your post has been deleted!', 'success')
-    return redirect(url_for('main.publication'))
+    flash("Your item has been deleted!", "success")
+    return redirect(url_for("main.publication"))

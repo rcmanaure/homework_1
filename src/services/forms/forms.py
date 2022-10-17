@@ -68,7 +68,7 @@ class UpdateAccountForm(FlaskForm):
 class ItemForm(FlaskForm):
     title = StringField("Title", validators=[DataRequired()])
     content = TextAreaField("Description", validators=[DataRequired()])
+    capacity = TextAreaField("Capacity", validators=[DataRequired()])
     package = TextAreaField("Package", validators=[DataRequired()])
-    package = TextAreaField("Package", validators=[DataRequired()])
-    fridge = BooleanField("Fridge", validators=[DataRequired()])
+    fridge = BooleanField("Fridge")
     submit = SubmitField("Post")
