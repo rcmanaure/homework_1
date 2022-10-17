@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<!-- Show message if the user already exist -->
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+<div class="notification is-danger">
+    {{ messages[0] }}.</a>.
+</div>
+{% endif %}
+{% endwith %}
+
+<form method="POST" action="/signup">
+<div class="column is-4 is-offset-4">
+    <h3 class="title">Sign Up</h3>
+    <div class="box">
+        <form method="POST" action="/signup">
+            {{ form.hidden_tag() }}
+            <div class="field">
+                <div class="control">
+                    <!-- <input class="input is-large" type="email" name="email" placeholder="Email" autofocus=""> -->
+                    {{form.email.label(class="form-control-label")}}
+                    {{form.email(class="input is-large")}}
+                </div>
+            </div>
+
+            <div class="field">
+                <div class="control">
+                    <!-- <input class="input is-large" type="email" name="email" placeholder="Email" autofocus=""> -->
+                    {{form.username.label(class="form-control-label")}}
+                    {{form.username(class="input is-large")}}
+                </div>
+            </div>
+
+            <div class="field">
+                <div class="control">
+                    <!-- <input class="input is-large" type="email" name="email" placeholder="Email" autofocus=""> -->
+                    {{form.password.label(class="form-control-label")}}
+                    {{form.password(class="input is-large")}}
+                </div>
+            </div>
+
+            <button class="button is-block is-info is-large is-fullwidth">Sign Up</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
