@@ -1,9 +1,11 @@
+import uuid
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 from flask_login import UserMixin
 from flask_login import LoginManager
 from flasgger import Swagger
+from sqlalchemy.dialects.postgresql import UUID
 from services.config.swagger import template, swagger_config
 # Init Flask.
 app = Flask(__name__)
@@ -56,16 +58,19 @@ class User(db.Model, UserMixin,):
         return f"User('{self.username}', '{self.email}', '{self.image_file}')"
 
 
-class Post(db.Model):
-    # Model Post to be created in Postgresql.
+class Items(db.Model):
+    # Model Post to be created in Postgresql.(Publicacion)
 
-    id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(100), nullable=False)
-    content = db.Column(db.Text, nullable=False)
-    priority = db.Column(db.String(100), default='medium', nullable=True)
-    status = db.Column(db.String(100), default='medium', nullable=True)
+    id = db.Column(UUID(as_uuid=True), default=uuid.uuid4, primary_key=True)
+    item = db.Column(db.String(50), nullable=False)
+    content = db.Column(db.Text, nullable=False)    
+    status = db.Column(db.String(30), default='WAITING', nullable=True)
+    capacity = db.Column(db.Integer,default=100, nullable=False)
+    package = db.Column(db.String(30), nullable=True)
+    fridge = db.Column(db.Boolean, nullable=True)
     user_id = db.Column(db.Integer, nullable=False)
-    author = db.Column(db.String,  nullable=False)
+    author = db.Column(db.String(100),  nullable=False)
+
     create_at = db.Column(db.DateTime, nullable=True, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, nullable=True,
                            default=datetime.utcnow)
